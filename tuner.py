@@ -8,7 +8,6 @@
 # License: Creative Commons Attribution-ShareAlike 3.0
 #          https://creativecommons.org/licenses/by-sa/3.0/us/
 ######################################################################
-import time
 
 import numpy as np
 import pyaudio
@@ -81,7 +80,6 @@ print()
 
 def run_tuner():
     num_frames = 0
-    start_time = time.time()
 
     # As long as we are getting data:
     while stream.is_active():

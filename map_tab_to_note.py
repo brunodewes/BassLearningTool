@@ -16,10 +16,3 @@ def get_note_name_from_midi(midi_note_number):
     note_name = note_names[midi_note_number % 12]
     octave = (midi_note_number // 12) + 1  # Add 1 to start from octave 1
     return f"{note_name}"
-
-
-# Example usage
-string_number = 4  # Fourth string
-fret_number = 0  # Open string
-note = map_tab_to_note(string_number, fret_number)
-print(f"Open string {string_number} corresponds to {note}")

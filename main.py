@@ -1,11 +1,11 @@
 import threading
-
 import pygame
 
-from compare_arrays import compare_data
-from tuner import run_tuner
 from collect_tab_data import collect_tab_data
+from compare_arrays import compare_data
 from detect_leading_silence import trim
+from tuner import run_tuner
+from shared_variables import played_data
 
 
 def play_music(mp3_file):
@@ -29,12 +29,11 @@ def main():
     tab_file = "tabs/soul_to_squeeze.gp4"
     bpm = 85
     tab_data = collect_tab_data(tab_file, bpm)
-    print(tab_data)
+    # print(tab_data)
 
-    from shared_variables import played_data
     note_index = 0
     is_check_time = False
-    tolerance_ms = 250
+    tolerance_ms = 100
 
     hits = 0
     misses = 0
@@ -44,8 +43,9 @@ def main():
     recording_thread.start()
 
     while pygame.mixer.music.get_busy():
-        if is_check_time:
-            compare_result = compare_data(tab_data=tab_data[note_index], played_data=played_data, tolerance_ms=tolerance_ms)
+        if is_check_time and len(played_data) > 0:
+            compare_result = compare_data(tab_data=tab_data[note_index], played_data=played_data,
+                                          tolerance_ms=tolerance_ms)
             if compare_result == 1:
                 hits += 1
             else:
