@@ -28,8 +28,7 @@ def collect_tab_data(tab_file):
                         for note in beat.notes:
                             note_name = map_tab_to_note(note.string, note.value)
                             tab_data.append({
-                                'time': int(beat.start*60/song.tempo),
-                                # "duration": note.beat.duration,
+                                'time': beat.start/(song.tempo/60),
                                 'string': note.string,
                                 'fret': note.value,
                                 'note_name': note_name
