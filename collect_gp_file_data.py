@@ -18,17 +18,19 @@ def collect_tab_data(tab_file):
     tab_data = []
 
     for track in song.tracks:
-        if len(track.strings) == 4:
-            for measure in track.measures:
-                for voice in measure.voices:
-                    for beat in voice.beats:
-                        for note in beat.notes:
-                            note_name = map_tab_to_note(note.string, note.value)
-                            tab_data.append({
-                                'time': beat.start/(song.tempo/60),
-                                'string': note.string,
-                                'fret': note.value,
-                                'note_name': note_name
-                            })
+        if not track.isPercussionTrack:
+            if len(track.strings) == 4:
+                for measure in track.measures:
+                    for voice in measure.voices:
+                        for beat in voice.beats:
+                            for note in beat.notes:
+                                if note.type not in (guitarpro.NoteType.dead, guitarpro.NoteType.tie):
+                                    note_name = map_tab_to_note(note.string, note.value)
+                                    tab_data.append({
+                                        'time': beat.start/(song.tempo/60),
+                                        'string': note.string,
+                                        'fret': note.value,
+                                        'note_name': note_name
+                                    })
 
     return tab_data

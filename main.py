@@ -26,8 +26,8 @@ def record_notes():
 
 
 def main():
-    # mp3_file = "songs/soul-to-squeeze.mp3"
-    mp3_file = "songs/20secondstest.mp3"
+    mp3_file = "songs/soul-to-squeeze.mp3"
+    # mp3_file = "songs/20secondstest.mp3"
     tab_file = "tabs/soul_to_squeeze.gp4"
     tab_data = collect_tab_data(tab_file)
     # tab_data = [{'time': 6098, 'string': 1, 'fret': 1, 'note_name': 'A'}, {'time': 7792, 'string': 2, 'fret': 2, 'note_name': 'E'}, {'time': 7962, 'string': 2, 'fret': 3, 'note_name': 'F#'}, {'time': 8131, 'string': 1, 'fret': 4, 'note_name': 'A'}, {'time': 8301, 'string': 2, 'fret': 5, 'note_name': 'F#'}, {'time': 8470, 'string': 1, 'fret': 6, 'note_name': 'A'}, {'time': 8640, 'string': 1, 'fret': 7, 'note_name': 'B'}, {'time': 8840, 'string': 2, 'fret': 8, 'note_name': 'B'}, {'time': 9040, 'string': 1, 'fret': 9, 'note_name': 'B'}]
