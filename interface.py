@@ -17,11 +17,12 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     row_height = string_spacing * 5  # Decreased y size
     empty_row_height = string_spacing  # Height of the empty row
     current_row = 0
+    scroll_y = 0
 
     # Store the contents of each row
     rows = []
 
-    # Initialize the line_x, line_y_start, and line_speed variables
+    # Initialize the line_x, line_y_start, and pixels_per_ms variables
     line_x = padding
     line_y_start = 0
     pixels_per_ms = 0.2  # Adjust this value to control the speed
@@ -63,7 +64,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
 
         # Blit each row (and empty row) onto the main screen
         for i, row in enumerate(rows):
-            row_y_position = i * (row_height + empty_row_height)
+            row_y_position = i * (row_height + empty_row_height) - scroll_y
             screen.blit(row, (0, row_y_position))
 
             # Draw a white rectangle to fill the gap between rows
@@ -87,26 +88,28 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
         time_difference = clock.tick(60)
         line_x += pixels_per_ms * time_difference
 
-        # Draw the rounded edges of the vertical line within the width limit
+        # Draw the rounded ends of the vertical line within the width limit
         line_x = min(line_x, width - padding)
 
         line_y_end = line_y_start + row_height
-        line_thickness = 15
+        line_thickness = 20
 
-        # Draw the central line
+        # Draw the central
         pygame.draw.line(screen, light_blue, (line_x, line_y_start), (line_x, line_y_end), line_thickness)
 
         # Draw rounded ends
         radius = line_thickness // 2
-        pygame.draw.circle(screen, light_blue, (line_x, line_y_start), radius)
-        pygame.draw.circle(screen, light_blue, (line_x, line_y_end), radius)
+        pygame.draw.circle(screen, light_blue, (line_x + 1, line_y_start), radius)
+        pygame.draw.circle(screen, light_blue, (line_x + 1, line_y_end), radius)
 
         # Move the line to the next row when it reaches the end of the current row
-        if line_x >= width - padding and line_y_start < (len(rows) - 1) * (row_height + empty_row_height):
+        if line_x + radius > width - padding and line_y_start < (len(rows) - 1) * (row_height + empty_row_height):
             line_x = padding
             line_y_start += row_height + empty_row_height
+            if line_y_start >= height:
+                scroll_y += line_y_start
+                line_y_start = 0
 
         pygame.display.flip()
 
     pygame.quit()
-    

@@ -19,9 +19,6 @@ def collect_tab_data(tab_file):
 
     for track in song.tracks:
         if len(track.strings) == 4:
-            print(f"Track: {track.name}")
-            print(f"song title: {song.title}")
-            print(f"song artist: {song.artist}")
             for measure in track.measures:
                 for voice in measure.voices:
                     for beat in voice.beats:
