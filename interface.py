@@ -1,7 +1,7 @@
 import pygame
 
 
-def generate_tab_interface(notes, song_info, width=1800, height=900, string_spacing=25, time_resolution=5, padding=20):
+def generate_tab_interface(notes, song_info, width=1800, height=900, string_spacing=25, time_resolution=4, padding=30):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
@@ -13,19 +13,15 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     black = (0, 0, 0)
     light_blue = (173, 216, 230)
 
-    row_width = width - padding * 2
+    width_limit = width - padding
     row_height = string_spacing * 5  # Decreased y size
     empty_row_height = string_spacing  # Height of the empty row
-    current_row = 0
     scroll_y = 0
-
-    # Store the contents of each row
-    rows = []
 
     # Initialize the line_x, line_y_start, and pixels_per_ms variables
     line_x = padding
     line_y_start = 0
-    pixels_per_ms = 0.2  # Adjust this value to control the speed
+    pixels_per_ms = 0.22  # Adjust this value to control the speed
 
     running = True
     while running:
@@ -33,11 +29,11 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
             if event.type == pygame.QUIT:
                 running = False
 
-        # Create a new row if needed
-        if current_row >= len(rows):
-            row = pygame.Surface((width, row_height + empty_row_height))
-            row.fill(white)  # Fill with a white background
-            rows.append(row)
+        # Store the contents of each row
+        rows = []
+
+        current_row = 0
+        prev_x_position = -1
 
         for note in notes:
             time = note['time']
@@ -45,17 +41,20 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
             fret = note['fret']
 
             # Calculate the x-position of the notes relative to the current row
-            x_position = (time // time_resolution) - (current_row * row_width) + padding
+            x_position = ((time // time_resolution + padding) % width_limit)
+            if x_position < padding:
+                x_position += padding
 
-            if x_position >= row_width:
+            # Check if x_position has lowered its value, indicating a new row
+            if x_position < prev_x_position:
                 current_row += 1
-                if current_row >= len(rows):
-                    row = pygame.Surface((width, row_height + empty_row_height))
-                    row.fill(white)
-                    rows.append(row)
 
-                # Calculate the new x-position for the notes
-                x_position = (time // time_resolution) - (current_row * row_width) + padding
+            prev_x_position = x_position
+
+            if current_row >= len(rows):
+                row = pygame.Surface((width, row_height + empty_row_height))
+                row.fill(white)  # Fill with a white background
+                rows.append(row)
 
             y_position = (string_spacing * (string - 1)) + 5
 
