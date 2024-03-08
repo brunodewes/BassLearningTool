@@ -21,7 +21,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     # Initialize the line_x, line_y_start, and pixels_per_ms variables
     line_x = padding
     line_y_start = 0
-    pixels_per_ms = 0.22  # Adjust this value to control the speed
+    pixels_per_ms = 0.25  # Adjust this value to control the speed
 
     running = True
     while running:

@@ -27,7 +27,7 @@ def collect_tab_data(tab_file):
                                 if note.type not in (guitarpro.NoteType.dead, guitarpro.NoteType.tie):
                                     note_name = map_tab_to_note(note.string, note.value)
                                     tab_data.append({
-                                        'time': beat.start/(song.tempo/60),
+                                        'time': (((beat.start/960)-1) * (60/song.tempo) * 1000),
                                         'string': note.string,
                                         'fret': note.value,
                                         'note_name': note_name
