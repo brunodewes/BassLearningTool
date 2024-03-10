@@ -35,7 +35,6 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
         rows = []
 
         current_row = 0
-        prev_x_position = -1
 
         for note in notes:
             time = note['time']
@@ -43,16 +42,14 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
             fret = note['fret']
             color = note['color']
 
-            # Calculate the x-position of the notes relative to the current row
-            x_position = ((time // time_resolution + padding) % width_limit)
-            if x_position < padding:
-                x_position += padding
+            std_time = time / time_resolution + padding
 
-            # Check if x_position has lowered its value, indicating a new row
-            if x_position < prev_x_position:
+            x_position = std_time % width_limit if std_time != width_limit else width_limit
+            # print(f"x_position: {x_position}, std_time: {std_time}, note_time: {time}")
+
+            if std_time > (width_limit * (current_row + 1)):
                 current_row += 1
-
-            prev_x_position = x_position
+                x_position += padding
 
             if current_row >= len(rows):
                 row = pygame.Surface((width, row_height + empty_row_height))
