@@ -1,3 +1,5 @@
+import math
+
 import pygame
 
 
@@ -25,14 +27,20 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     line_y_start = 0
     pixels_per_ms = 0.25  # Adjust this value to control the speed
 
+    # Create the rows (length based on the last note's time)
+    num_surfaces = math.ceil(((notes[-1]['time'] / time_resolution) / (width - padding * 2)))
+    rows = [pygame.Surface((width, row_height + empty_row_height)) for _ in range(num_surfaces)]
+    for row in rows:
+        row.fill(white)
+
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        # Store the contents of each row
-        rows = []
+        if rows:
+            rows[0].fill(white)
 
         current_row = 0
 
@@ -49,12 +57,8 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
 
             if std_time > (width_limit * (current_row + 1)):
                 current_row += 1
+                rows[current_row].fill(white)
                 x_position += padding
-
-            if current_row >= len(rows):
-                row = pygame.Surface((width, row_height + empty_row_height))
-                row.fill(white)  # Fill with a white background
-                rows.append(row)
 
             y_position = (string_spacing * (string - 1)) + 5
 
