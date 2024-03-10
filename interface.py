@@ -12,6 +12,8 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     white = (255, 255, 255)
     black = (0, 0, 0)
     light_blue = (173, 216, 230)
+    green = (0, 255, 0)
+    red = (255, 0, 0)
 
     width_limit = width - padding
     row_height = string_spacing * 5  # Decreased y size
@@ -39,6 +41,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
             time = note['time']
             string = note['string']
             fret = note['fret']
+            color = note['color']
 
             # Calculate the x-position of the notes relative to the current row
             x_position = ((time // time_resolution + padding) % width_limit)
@@ -58,7 +61,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
 
             y_position = (string_spacing * (string - 1)) + 5
 
-            text = font.render(str(fret), True, black)
+            text = font.render(str(fret), True, color)
             rows[current_row].blit(text, (x_position, y_position))
 
         # Blit each row (and empty row) onto the main screen

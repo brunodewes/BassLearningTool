@@ -30,7 +30,8 @@ def collect_tab_data(tab_file):
                                         'time': (((beat.start/960)-1) * (60/song.tempo) * 1000),
                                         'string': note.string,
                                         'fret': note.value,
-                                        'note_name': note_name
+                                        'note_name': note_name,
+                                        'color': (0, 0, 0)
                                     })
 
     return tab_data

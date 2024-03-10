@@ -34,8 +34,8 @@ def main():
     # tab_data = [{'time': 0, 'string': 1, 'fret': 1, 'note_name': 'A'}, {'time': 7792, 'string': 2, 'fret': 2, 'note_name': 'E'}, {'time': 7962, 'string': 2, 'fret': 3, 'note_name': 'F#'}, {'time': 8131, 'string': 1, 'fret': 4, 'note_name': 'A'}, {'time': 8301, 'string': 2, 'fret': 5, 'note_name': 'F#'}, {'time': 8699, 'string': 1, 'fret': 24, 'note_name': 'A'}, {'time': 8700, 'string': 1, 'fret': 24, 'note_name': 'B'}, {'time': 8849, 'string': 2, 'fret': 14, 'note_name': 'B'}, {'time': 9040, 'string': 1, 'fret': 9, 'note_name': 'B'}]
     # tab_data = [{'time': 6098, 'string': 1, 'fret': 1, 'note_name': 'A'}, {'time': 7792, 'string': 2, 'fret': 2, 'note_name': 'E'}, {'time': 7962, 'string': 2, 'fret': 3, 'note_name': 'F#'}, {'time': 8131, 'string': 1, 'fret': 4, 'note_name': 'A'}, {'time': 8301, 'string': 2, 'fret': 5, 'note_name': 'F#'}, {'time': 8470, 'string': 1, 'fret': 6, 'note_name': 'A'}, {'time': 8640, 'string': 1, 'fret': 7, 'note_name': 'B'}, {'time': 8840, 'string': 2, 'fret': 8, 'note_name': 'B'}]
     song_info = collect_song_info(tab_file)
-    for note in tab_data:
-        print(note)
+    # for note in tab_data:
+    #     print(note)
 
     recording_thread = threading.Thread(target=record_notes)
     play_music(mp3_file)
@@ -65,10 +65,10 @@ def main():
                                           tolerance_ms=tolerance_ms)
             if compare_result == 1:
                 hits += 1
+                tab_data[note_index]['color'] = (0, 255, 0)
             else:
                 misses += 1
-
-            print(f"Hits: {hits}, Misses: {misses}")
+                tab_data[note_index]['color'] = (255, 0, 0)
 
             is_check_time = False
             note_index += 1
