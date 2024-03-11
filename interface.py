@@ -14,8 +14,6 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
     white = (255, 255, 255)
     black = (0, 0, 0)
     light_blue = (173, 216, 230)
-    green = (0, 255, 0)
-    red = (255, 0, 0)
 
     width_limit = width - padding
     row_height = string_spacing * 5  # Decreased y size
@@ -50,7 +48,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
             fret = note['fret']
             color = note['color']
 
-            std_time = time / time_resolution + padding
+            std_time = time / time_resolution + padding * 2
 
             x_position = std_time % width_limit if std_time % width_limit != 0 else width_limit
             # print(f"x_position: {x_position}, std_time: {std_time}, note_time: {time}")
@@ -60,7 +58,6 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
             if std_time > row_width_limit:
                 current_row += int(std_time / row_width_limit)
                 rows[current_row].fill(white)
-                x_position += padding
 
             y_position = (string_spacing * (string - 1)) + 5
 
@@ -90,7 +87,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
                 screen.blit(font.render(label, True, black), (0, y + row_y_position))
 
         # Update the x-coordinate of the line based on the speed and time difference
-        time_difference = clock.tick(60)
+        time_difference = clock.tick(240)
         line_x += pixels_per_ms * time_difference
 
         # Draw the rounded ends of the vertical line within the width limit
