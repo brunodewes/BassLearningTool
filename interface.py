@@ -3,7 +3,7 @@ import math
 import pygame
 
 
-def generate_tab_interface(notes, song_info, width=1800, height=900, string_spacing=25, time_resolution=4, padding=30):
+def generate_tab_interface(notes, song_info, width=1800, height=900, string_spacing=25, padding=30):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
@@ -25,10 +25,10 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
     # Initialize the line_x, line_y_start, and pixels_per_ms variables
     line_x = padding
     line_y_start = 0
-    pixels_per_ms = 0.25  # Adjust this value to control the speed
+    pixels_per_ms = 1  # Adjust this value to control the speed
 
     # Create the rows (length based on the last note's time)
-    num_surfaces = math.ceil(((notes[-1]['time'] / time_resolution) / (width - padding * 2)))
+    num_surfaces = math.ceil((notes[-1]['time']) / (width - padding * 2))
     rows = [pygame.Surface((width, row_height + empty_row_height)) for _ in range(num_surfaces)]
     for row in rows:
         row.fill(white)
@@ -50,13 +50,13 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, string_spac
             fret = note['fret']
             color = note['color']
 
-            std_time = time / time_resolution + padding
+            std_time = time + padding
 
-            x_position = std_time % width_limit if std_time != width_limit else width_limit
+            x_position = std_time % width_limit if std_time % width_limit != 0 else width_limit
             # print(f"x_position: {x_position}, std_time: {std_time}, note_time: {time}")
 
             if std_time > (width_limit * (current_row + 1)):
-                current_row += 1
+                current_row += int(std_time / (width_limit * (current_row + 1)))
                 rows[current_row].fill(white)
                 x_position += padding
 
