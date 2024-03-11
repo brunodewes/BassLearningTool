@@ -31,7 +31,8 @@ def main():
     tab_file = "tabs/soul_to_squeeze.gp4"
     # tab_file = "tabs/60bpm.gp5"
     tab_data = collect_tab_data(tab_file)
-    # tab_data = [{'time': 0, 'string': 1, 'fret': 1, 'note_name': 'A', 'color': (0, 0, 0)}, {'time': 6961, 'string': 2, 'fret': 2, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 7061, 'string': 2, 'fret': 3, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 7161, 'string': 2, 'fret': 4, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 14041, 'string': 3, 'fret': 5, 'note_name': 'E', 'color': (0, 0, 0)}]
+    # tab_data = [{'time': 1, 'string': 1, 'fret': 1, 'note_name': 'A', 'color': (0, 0, 0)}, {'time': 6960, 'string': 1, 'fret': 2, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 6961, 'string': 2, 'fret': 3, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 13920, 'string': 2, 'fret': 4, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 13921, 'string': 3, 'fret': 5, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 20880, 'string': 3, 'fret': 6, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 20881, 'string': 4, 'fret': 7, 'note_name': 'E', 'color': (0, 0, 0)}]
+    # tab_data = [{'time': 1, 'string': 1, 'fret': 1, 'note_name': 'A', 'color': (0, 0, 0)}, {'time': 20881, 'string': 4, 'fret': 7, 'note_name': 'E', 'color': (0, 0, 0)}]
     song_info = collect_song_info(tab_file)
     # for note in tab_data:
     #     print(note)

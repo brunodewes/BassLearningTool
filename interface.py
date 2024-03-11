@@ -48,15 +48,15 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
             fret = note['fret']
             color = note['color']
 
-            std_time = time / time_resolution + padding * 2
+            std_time = time / time_resolution
+            std_time_width = std_time + padding * math.ceil(std_time / (width - padding * 2))
 
-            x_position = std_time % width_limit if std_time % width_limit != 0 else width_limit
-            # print(f"x_position: {x_position}, std_time: {std_time}, note_time: {time}")
+            x_position = std_time_width % width_limit if std_time_width % width_limit != 0 else width_limit
 
             row_width_limit = width_limit * (current_row + 1)
 
-            if std_time > row_width_limit:
-                current_row += int(std_time / row_width_limit)
+            if std_time_width > row_width_limit:
+                current_row = math.ceil(std_time_width / width_limit) - 1
                 rows[current_row].fill(white)
 
             y_position = (string_spacing * (string - 1)) + 5
