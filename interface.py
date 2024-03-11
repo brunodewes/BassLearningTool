@@ -55,8 +55,10 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
             x_position = std_time % width_limit if std_time % width_limit != 0 else width_limit
             # print(f"x_position: {x_position}, std_time: {std_time}, note_time: {time}")
 
-            if std_time > (width_limit * (current_row + 1)):
-                current_row += int(std_time / (width_limit * (current_row + 1)))
+            row_width_limit = width_limit * (current_row + 1)
+
+            if std_time > row_width_limit:
+                current_row += int(std_time / row_width_limit)
                 rows[current_row].fill(white)
                 x_position += padding
 
