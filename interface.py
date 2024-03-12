@@ -44,6 +44,8 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
 
         for note in notes:
             time = note['time']
+            if time == 0:
+                time = 1
             string = note['string']
             fret = note['fret']
             color = note['color']
@@ -100,12 +102,12 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
         pygame.draw.line(screen, light_blue, (line_x, line_y_start), (line_x, line_y_end), line_thickness)
 
         # Draw rounded ends
-        radius = line_thickness // 2
+        radius = line_thickness / 2
         pygame.draw.circle(screen, light_blue, (line_x + 1, line_y_start), radius)
         pygame.draw.circle(screen, light_blue, (line_x + 1, line_y_end), radius)
 
         # Move the line to the next row when it reaches the end of the current row
-        if line_x + radius > width - padding and line_y_start < (len(rows) - 1) * (row_height + empty_row_height):
+        if line_x >= width - padding and line_y_start < (len(rows) - 1) * (row_height + empty_row_height):
             line_x = padding
             line_y_start += row_height + empty_row_height
             if line_y_start >= height:

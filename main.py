@@ -1,4 +1,5 @@
 import threading
+
 import pygame
 
 from collect_gp_file_data import collect_tab_data, collect_song_info
@@ -9,27 +10,15 @@ from tuner import run_tuner
 from shared_variables import played_data
 
 
-def play_music(mp3_file):
-    pygame.mixer.init()
-
-    # Trim the audio and save it as a temporary WAV file
-    trimmed_sound = trim(mp3_file)
-    temp_wav_file = "temp_audio.wav"
-    trimmed_sound.export(temp_wav_file, format='wav')
-
-    pygame.mixer.music.load(temp_wav_file)
-    pygame.mixer.music.play()
-
-
 def record_notes():
     run_tuner()
 
 
 def main():
-    mp3_file = "songs/soul-to-squeeze.mp3"
-    # mp3_file = "songs/20secondstest.mp3"
+    mp3_file = "songs/soul_to_squeeze (midi).wav"
+    # mp3_file = "songs/60bpm 5min.mp3"
     tab_file = "tabs/soul_to_squeeze.gp4"
-    # tab_file = "tabs/60bpm.gp5"
+    # tab_file = "tabs/60bpm long.gp4"
     tab_data = collect_tab_data(tab_file)
     # tab_data = [{'time': 1, 'string': 1, 'fret': 1, 'note_name': 'A', 'color': (0, 0, 0)}, {'time': 6960, 'string': 1, 'fret': 2, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 6961, 'string': 2, 'fret': 3, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 13920, 'string': 2, 'fret': 4, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 13921, 'string': 3, 'fret': 5, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 20880, 'string': 3, 'fret': 6, 'note_name': 'E', 'color': (0, 0, 0)}, {'time': 20881, 'string': 4, 'fret': 7, 'note_name': 'E', 'color': (0, 0, 0)}]
     # tab_data = [{'time': 1, 'string': 1, 'fret': 1, 'note_name': 'A', 'color': (0, 0, 0)}, {'time': 20881, 'string': 4, 'fret': 7, 'note_name': 'E', 'color': (0, 0, 0)}]
@@ -37,17 +26,25 @@ def main():
     # for note in tab_data:
     #     print(note)
 
+    interface_thread = threading.Thread(target=generate_tab_interface, args=(tab_data, song_info,))
     recording_thread = threading.Thread(target=record_notes)
-    play_music(mp3_file)
-    recording_thread.start()
 
-    # Create the interface in a separate thread
-    interface_thread = threading.Thread(target=generate_tab_interface, args=(tab_data, song_info))
+    pygame.mixer.init()
+
+    # Trim the silence in the audio start and save it as a temporary WAV file
+    trimmed_sound = trim(mp3_file)
+    temp_wav_file = "temp_audio.wav"
+    trimmed_sound.export(temp_wav_file, format='wav')
+
+    pygame.mixer.music.load(temp_wav_file)
+
     interface_thread.start()
+    pygame.mixer.music.play()
+    recording_thread.start()
 
     note_index = 0
     is_check_time = False
-    tolerance_ms = 100
+    tolerance_ms = 350
 
     hits = 0
     misses = 0
