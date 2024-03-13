@@ -81,7 +81,7 @@ def run_tuner():
     num_frames = 0
 
     # As long as we are getting data:
-    while stream.is_active():
+    while stream.is_active() and pygame.mixer.music.get_busy():
 
         # Shift the buffer down and new data in
         buf[:-FRAME_SIZE] = buf[FRAME_SIZE:]
