@@ -19,9 +19,14 @@ def main():
     is_check_time = False
     tolerance_ms = 350
 
-    tab_data = collect_tab_data(shared_variables.tab_file)
+    tab_data = []
+    tab_data_collected = False
 
     while pygame.mixer.music.get_busy():
+        if not tab_data_collected:
+            tab_data = collect_tab_data(shared_variables.tab_file)
+            tab_data_collected = True
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.mixer.music.stop()  # Stop the music if the window is closed

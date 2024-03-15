@@ -1,7 +1,7 @@
 played_data = []
 
-tab_file = "<No File Selected>"
-music = "<No File Selected>"
+tab_file = ""
+music_file = ""
 
 hits = 0
 misses = 0

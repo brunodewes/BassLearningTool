@@ -15,6 +15,8 @@ from tuner import run_tuner
 
 def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, padding=30):
     pygame.init()
+    pygame.mixer.init()
+
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Bass Learning Tool")
 
@@ -42,6 +44,9 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
 
     tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
 
+    start_button_clicked = False
+    running = False
+
     running_start_screen = True
     while running_start_screen:
         for event in pygame.event.get():
@@ -50,12 +55,17 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if tab_button_rect.collidepoint(mouse_pos):
-                    shared_variables.tab_file = prompt_file(button_type='tab')
+                    tab_file = prompt_file(button_type='tab')
+                    shared_variables.tab_file = tab_file if tab_file != "" else shared_variables.tab_file
                 elif music_button_rect.collidepoint(mouse_pos):
-                    shared_variables.music = prompt_file(button_type='music')
+                    music_file = prompt_file(button_type='music')
+                    shared_variables.music_file = music_file if music_file != "" else shared_variables.music_file
                 elif start_button_rect.collidepoint(mouse_pos):
-                    if shared_variables.tab_file.endswith((".gp3", ".gp4", ".gp5")) and shared_variables.music.endswith(("wav", "mp3")):
+                    start_button_clicked = True
+                    if shared_variables.tab_file.endswith((".gp3", ".gp4", ".gp5")) and shared_variables.music_file.endswith(("wav", "mp3")):
                         running_start_screen = False
+
+        tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
 
         pygame.display.flip()
         clock.tick(60)
@@ -71,22 +81,23 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
 
     recording_thread = threading.Thread(target=run_tuner)
 
-    pygame.mixer.init()
-
     # Trim the silence in the audio start and save it as a temporary WAV file
-    trimmed_sound = trim(shared_variables.music)
+    trimmed_sound = trim(shared_variables.music_file)
     temp_wav_file = "../temp_audio.wav"
     trimmed_sound.export(temp_wav_file, format='wav')
 
     pygame.mixer.music.load(temp_wav_file)
 
-    start_countdown(screen, duration=3000)
+    if start_button_clicked:
+        start_countdown(screen, duration=3000)
 
-    pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
-    recording_thread.start()
-    pygame.mixer.music.play()
+        pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
+        recording_thread.start()
+        pygame.mixer.music.play()
 
-    running = True
+        running = True
+        clock = pygame.time.Clock()
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -171,7 +182,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                 scroll_y += line_y_start
                 line_y_start = 0
 
-        if y_accumulator == (len(rows) - 1) * total_row_height:
+        if y_accumulator == (len(rows) - 1) * total_row_height and line_x >= width - padding:
             if not waiting:
                 wait_start_time = pygame.time.get_ticks()
                 waiting = True
@@ -193,10 +204,10 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                         f"{'=' * 40}\n\n"
                         f"Acertos: {hits}\n"
                         f"Erros: {misses}\n"
-                        f"Precisão: {precision:.2f}"
+                        f"Precisão: {precision:.2f}%"
                     )
 
-                    report_font = pygame.font.Font(None, 36)
+                    report_font = pygame.font.Font(None, 48)
                     text_y = height * 0.1  # Initial y position for the text
 
                     for i, line in enumerate(report_text.split("\n")):
