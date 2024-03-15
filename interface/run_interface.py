@@ -1,19 +1,29 @@
-import math
-import shared_variables
+import threading
+
 import pygame
 
+import math
 
-def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolution=4, string_spacing=25, padding=30):
+import shared_variables
+from collect_gp_file_data import collect_tab_data, collect_song_info
+from detect_leading_silence import trim
+from interface.display_start_screen import display_start_screen
+from interface.prompt_file import prompt_file
+from interface.start_countdown import start_countdown
+from tuner import run_tuner
+
+
+def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, padding=30):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
+    pygame.display.set_caption("Bass Learning Tool")
 
     clock = pygame.time.Clock()
 
     font = pygame.font.Font(None, 36)
-    white = (255, 255, 255)
-    black = (0, 0, 0)
-    light_blue = (173, 216, 230)
+    white = (230, 230, 230)
+    black = (43, 45, 48)
+    light_blue = (135, 206, 235)
 
     width_limit = width - padding
     row_height = string_spacing * 5  # Decreased y size
@@ -26,15 +36,55 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
     y_accumulator = 0
     pixels_per_ms = 1 / time_resolution
 
+    waiting = False
+    wait_start_time = None
+    wait_duration = 1000
+
+    tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
+
+    running_start_screen = True
+    while running_start_screen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running_start_screen = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if tab_button_rect.collidepoint(mouse_pos):
+                    shared_variables.tab_file = prompt_file(button_type='tab')
+                elif music_button_rect.collidepoint(mouse_pos):
+                    shared_variables.music = prompt_file(button_type='music')
+                elif start_button_rect.collidepoint(mouse_pos):
+                    if shared_variables.tab_file.endswith((".gp3", ".gp4", ".gp5")) and shared_variables.music.endswith(("wav", "mp3")):
+                        running_start_screen = False
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    notes = collect_tab_data(shared_variables.tab_file)
+    song_info = collect_song_info(shared_variables.tab_file)
+
     # Create the rows (length based on the last note's time)
     num_surfaces = math.ceil((notes[-1]['time'] / time_resolution) / (width - padding * 2))
     rows = [pygame.Surface((width, total_row_height)) for _ in range(num_surfaces)]
     for row in rows:
         row.fill(white)
 
-    waiting = False
-    wait_start_time = None
-    wait_duration = 1000
+    recording_thread = threading.Thread(target=run_tuner)
+
+    pygame.mixer.init()
+
+    # Trim the silence in the audio start and save it as a temporary WAV file
+    trimmed_sound = trim(shared_variables.music)
+    temp_wav_file = "../temp_audio.wav"
+    trimmed_sound.export(temp_wav_file, format='wav')
+
+    pygame.mixer.music.load(temp_wav_file)
+
+    start_countdown(screen, duration=3000)
+
+    pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
+    recording_thread.start()
+    pygame.mixer.music.play()
 
     running = True
     while running:
@@ -128,8 +178,7 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
             else:
                 # Check if the waiting period has elapsed
                 if pygame.time.get_ticks() - wait_start_time >= wait_duration:
-                    # Fill the screen white
-                    screen.fill(white)
+                    screen.fill(black)
 
                     # Create and display the report
                     message = "Música concluída com sucesso!"
@@ -138,10 +187,10 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
                     precision = hits / len(notes)
 
                     report_text = (
-                        f"{'Música concluída com sucesso!':}\n\n"
-                        f"{'='*40}\n"
+                        f"{message}\n\n"
+                        f"{'=' * 40}\n"
                         f"{song_info['artist']} - {song_info['title']}\n"
-                        f"{'='*40}\n\n"
+                        f"{'=' * 40}\n\n"
                         f"Acertos: {hits}\n"
                         f"Erros: {misses}\n"
                         f"Precisão: {precision:.2f}"
@@ -151,8 +200,9 @@ def generate_tab_interface(notes, song_info, width=1800, height=900, time_resolu
                     text_y = height * 0.1  # Initial y position for the text
 
                     for i, line in enumerate(report_text.split("\n")):
-                        text_surface = report_font.render(line, True, black)
-                        text_rect = text_surface.get_rect(right=(width - padding - 10), centery=text_y + text_surface.get_height() // 2)
+                        text_surface = report_font.render(line, True, white)
+                        text_rect = text_surface.get_rect(right=(width - padding - 10),
+                                                          centery=text_y + text_surface.get_height() // 2)
                         text_rect.centerx = width // 2  # Center horizontally
                         screen.blit(text_surface, text_rect)
                         text_y += text_surface.get_height() + 10  # Add spacing between lines

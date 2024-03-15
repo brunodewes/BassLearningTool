@@ -31,7 +31,7 @@ def collect_tab_data(tab_file):
                                         'string': note.string,
                                         'fret': note.value,
                                         'note_name': note_name,
-                                        'color': (0, 0, 0)
+                                        'color': (43, 45, 48)
                                     })
 
     return tab_data
