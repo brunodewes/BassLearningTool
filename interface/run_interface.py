@@ -183,40 +183,44 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                 line_y_start = 0
 
         if y_accumulator == (len(rows) - 1) * total_row_height and line_x >= width - padding:
-            if not waiting:
-                wait_start_time = pygame.time.get_ticks()
-                waiting = True
+            # Wait for music to finish
+            if pygame.mixer.music.get_busy():
+                pass
             else:
-                # Check if the waiting period has elapsed
-                if pygame.time.get_ticks() - wait_start_time >= wait_duration:
-                    screen.fill(black)
+                if not waiting:
+                    wait_start_time = pygame.time.get_ticks()
+                    waiting = True
+                else:
+                    # Check if the waiting period has elapsed
+                    if pygame.time.get_ticks() - wait_start_time >= wait_duration:
+                        screen.fill(black)
 
-                    # Create and display the report
-                    message = "Música concluída com sucesso!"
-                    hits = shared_variables.hits
-                    misses = shared_variables.misses
-                    precision = hits / len(notes)
+                        # Create and display the report
+                        message = "Música concluída com sucesso!"
+                        hits = shared_variables.hits
+                        misses = shared_variables.misses
+                        precision = hits / len(notes)
 
-                    report_text = (
-                        f"{message}\n\n"
-                        f"{'=' * 40}\n"
-                        f"{song_info['artist']} - {song_info['title']}\n"
-                        f"{'=' * 40}\n\n"
-                        f"Acertos: {hits}\n"
-                        f"Erros: {misses}\n"
-                        f"Precisão: {precision:.2f}%"
-                    )
+                        report_text = (
+                            f"{message}\n\n"
+                            f"{'=' * 40}\n"
+                            f"{song_info['artist']} - {song_info['title']}\n"
+                            f"{'=' * 40}\n\n"
+                            f"Acertos: {hits}\n"
+                            f"Erros: {misses}\n"
+                            f"Precisão: {precision:.2f}%"
+                        )
 
-                    report_font = pygame.font.Font(None, 48)
-                    text_y = height * 0.1  # Initial y position for the text
+                        report_font = pygame.font.Font(None, 48)
+                        text_y = height * 0.1  # Initial y position for the text
 
-                    for i, line in enumerate(report_text.split("\n")):
-                        text_surface = report_font.render(line, True, white)
-                        text_rect = text_surface.get_rect(right=(width - padding - 10),
-                                                          centery=text_y + text_surface.get_height() // 2)
-                        text_rect.centerx = width // 2  # Center horizontally
-                        screen.blit(text_surface, text_rect)
-                        text_y += text_surface.get_height() + 10  # Add spacing between lines
+                        for i, line in enumerate(report_text.split("\n")):
+                            text_surface = report_font.render(line, True, white)
+                            text_rect = text_surface.get_rect(right=(width - padding - 10),
+                                                              centery=text_y + text_surface.get_height() // 2)
+                            text_rect.centerx = width // 2  # Center horizontally
+                            screen.blit(text_surface, text_rect)
+                            text_y += text_surface.get_height() + 10  # Add spacing between lines
 
         pygame.display.flip()
 
