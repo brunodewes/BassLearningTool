@@ -1,3 +1,4 @@
+import os
 import threading
 
 import pygame
@@ -79,6 +80,10 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
     collect_tab_data(shared_variables.tab_file)
     tab_id = shared_variables.tab_data[-1]['time'] - shared_variables.tab_data[0]['time']
     song_info = collect_song_info(shared_variables.tab_file)
+    if song_info['artist'] != "" and song_info['title'] != "":
+        tab_name = f"{song_info['artist']} - {song_info['title']}"
+    else:
+        tab_name = os.path.basename(shared_variables.tab_file)
 
     # Create the rows (length based on the last note's time)
     num_surfaces = math.ceil((shared_variables.tab_data[-1]['time'] / time_resolution) / (width - padding * 2))
@@ -210,7 +215,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
 
                         # Update database if record beaten
                         if precision > query_database(tab_id):
-                            update_database(tab_id, precision)
+                            update_database(tab_id, tab_name, precision)
                             record_beaten = True
 
                         if record_beaten:
