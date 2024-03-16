@@ -6,9 +6,10 @@ import math
 
 import shared_variables
 from collect_gp_file_data import collect_tab_data, collect_song_info
+from database.database_crud import query_database, update_database
 from detect_leading_silence import trim
 from feedback import give_feedback
-from interface.display_start_screen import display_start_screen
+from interface.display_buttons import display_start_screen, display_end_screen_buttons
 from interface.prompt_file import prompt_file
 from interface.start_countdown import start_countdown
 from tuner import run_tuner
@@ -40,7 +41,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
     line_x = padding
     line_y_start = 0
     y_accumulator = 0
-    pixels_per_ms = 1 / time_resolution
+    pixels_per_ms = 16 / time_resolution
 
     waiting = False
     wait_start_time = None
@@ -50,6 +51,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
 
     start_button_clicked = False
     running = False
+    record_beaten = False
 
     running_start_screen = True
     while running_start_screen:
@@ -75,6 +77,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
         clock.tick(60)
 
     collect_tab_data(shared_variables.tab_file)
+    tab_id = shared_variables.tab_data[-1]['time'] - shared_variables.tab_data[0]['time']
     song_info = collect_song_info(shared_variables.tab_file)
 
     # Create the rows (length based on the last note's time)
@@ -199,20 +202,39 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                         screen.fill(black)
 
                         # Create and display the report
-                        message = "Música concluída com sucesso!"
+                        finish_message = "Música concluída com sucesso!"
+                        record_beaten_message = "Você atingiu um novo recorde!"
                         hits = shared_variables.hits
                         misses = shared_variables.misses
-                        precision = hits / len(shared_variables.tab_data) * 100
+                        precision = f"{(hits / len(shared_variables.tab_data) * 100):.2f}"
 
-                        report_text = (
-                            f"{message}\n\n"
-                            f"{'=' * 40}\n"
-                            f"{song_info['artist']} - {song_info['title']}\n"
-                            f"{'=' * 40}\n\n"
-                            f"Acertos: {hits}\n"
-                            f"Erros: {misses}\n"
-                            f"Precisão: {precision:.2f}%"
-                        )
+                        # Update database if record beaten
+                        if precision > query_database(tab_id):
+                            update_database(tab_id, precision)
+                            record_beaten = True
+
+                        if record_beaten:
+                            report_text = (
+                                f"{finish_message}\n\n"
+                                f"{'=' * 40}\n"
+                                f"{song_info['artist']} - {song_info['title']}\n"
+                                f"{'=' * 40}\n\n"
+                                f"{record_beaten_message}\n\n"
+                                f"Acertos: {hits}\n"
+                                f"Erros: {misses}\n"
+                                f"Precisão: {precision}%"
+                            )
+                        else:
+                            report_text = (
+                                f"{finish_message}\n\n"
+                                f"{'=' * 40}\n"
+                                f"{song_info['artist']} - {song_info['title']}\n"
+                                f"{'=' * 40}\n\n"
+                                f"Acertos: {hits}\n"
+                                f"Erros: {misses}\n"
+                                f"Precisão: {precision}%\n"
+                                f"Recorde Pessoal: {query_database(tab_id)}%"
+                            )
 
                         report_font = pygame.font.Font(None, 48)
                         text_y = height * 0.1  # Initial y position for the text
@@ -224,6 +246,18 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                             text_rect.centerx = width // 2  # Center horizontally
                             screen.blit(text_surface, text_rect)
                             text_y += text_surface.get_height() + 10  # Add spacing between lines
+
+                            back_to_start_button_rect = display_end_screen_buttons(screen, font, width, height)
+
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                    pygame.quit()
+                                if event.type == pygame.MOUSEBUTTONDOWN:
+                                    mouse_pos = pygame.mouse.get_pos()
+                                    if back_to_start_button_rect.collidepoint(mouse_pos):
+                                        shared_variables.reset_globals()
+                                        pygame.quit()
+                                        run_interface()
 
         pygame.display.flip()
 

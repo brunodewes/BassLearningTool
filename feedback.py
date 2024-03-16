@@ -7,7 +7,7 @@ import shared_variables
 def give_feedback():
     note_index = 0
     is_check_time = False
-    tolerance_ms = 350
+    tolerance_ms = 200
 
     while pygame.mixer.music.get_busy():
         for event in pygame.event.get():
