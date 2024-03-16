@@ -1,6 +1,5 @@
 import pygame
 
-from collect_gp_file_data import collect_tab_data
 from compare_arrays import compare_data
 import shared_variables
 
