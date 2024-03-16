@@ -202,7 +202,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                         message = "Música concluída com sucesso!"
                         hits = shared_variables.hits
                         misses = shared_variables.misses
-                        precision = hits / len(shared_variables.tab_data)
+                        precision = hits / len(shared_variables.tab_data) * 100
 
                         report_text = (
                             f"{message}\n\n"
