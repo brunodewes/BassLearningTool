@@ -7,6 +7,7 @@ import math
 import shared_variables
 from collect_gp_file_data import collect_tab_data, collect_song_info
 from detect_leading_silence import trim
+from feedback import give_feedback
 from interface.display_start_screen import display_start_screen
 from interface.prompt_file import prompt_file
 from interface.start_countdown import start_countdown
@@ -16,6 +17,9 @@ from tuner import run_tuner
 def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, padding=30):
     pygame.init()
     pygame.mixer.init()
+
+    recording_thread = threading.Thread(target=run_tuner)
+    feedback_thread = threading.Thread(target=give_feedback)
 
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Bass Learning Tool")
@@ -70,16 +74,14 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
         pygame.display.flip()
         clock.tick(60)
 
-    notes = collect_tab_data(shared_variables.tab_file)
+    collect_tab_data(shared_variables.tab_file)
     song_info = collect_song_info(shared_variables.tab_file)
 
     # Create the rows (length based on the last note's time)
-    num_surfaces = math.ceil((notes[-1]['time'] / time_resolution) / (width - padding * 2))
+    num_surfaces = math.ceil((shared_variables.tab_data[-1]['time'] / time_resolution) / (width - padding * 2))
     rows = [pygame.Surface((width, total_row_height)) for _ in range(num_surfaces)]
     for row in rows:
         row.fill(white)
-
-    recording_thread = threading.Thread(target=run_tuner)
 
     # Trim the silence in the audio start and save it as a temporary WAV file
     trimmed_sound = trim(shared_variables.music_file)
@@ -92,8 +94,9 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
         start_countdown(screen, duration=3000)
 
         pygame.display.set_caption(f"{song_info['artist']} - {song_info['title']}")
-        recording_thread.start()
         pygame.mixer.music.play()
+        recording_thread.start()
+        feedback_thread.start()
 
         running = True
         clock = pygame.time.Clock()
@@ -108,7 +111,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
 
         current_row = 0
 
-        for note in notes:
+        for note in shared_variables.tab_data:
             time = note['time']
             if time == 0:
                 time = 1
@@ -199,7 +202,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                         message = "Música concluída com sucesso!"
                         hits = shared_variables.hits
                         misses = shared_variables.misses
-                        precision = hits / len(notes)
+                        precision = hits / len(shared_variables.tab_data)
 
                         report_text = (
                             f"{message}\n\n"

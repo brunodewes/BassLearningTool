@@ -1,5 +1,6 @@
 import guitarpro
 
+import shared_variables
 from map_tab_to_note import map_tab_to_note
 
 
@@ -15,7 +16,6 @@ def collect_song_info(tab_file):
 
 def collect_tab_data(tab_file):
     song = guitarpro.parse(tab_file)
-    tab_data = []
 
     for track in song.tracks:
         if not track.isPercussionTrack:
@@ -26,12 +26,10 @@ def collect_tab_data(tab_file):
                             for note in beat.notes:
                                 if note.type not in (guitarpro.NoteType.dead, guitarpro.NoteType.tie):
                                     note_name = map_tab_to_note(note.string, note.value)
-                                    tab_data.append({
+                                    shared_variables.tab_data.append({
                                         'time': (((beat.start/960)-1) * (60/song.tempo) * 1000),
                                         'string': note.string,
                                         'fret': note.value,
                                         'note_name': note_name,
                                         'color': (43, 45, 48)
                                     })
-
-    return tab_data

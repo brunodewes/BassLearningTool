@@ -12,7 +12,7 @@ import numpy as np
 import pyaudio
 import pygame
 
-from shared_variables import played_data
+import shared_variables
 
 ######################################################################
 # Feel free to play with these numbers. Might want to change NOTE_MIN
@@ -110,5 +110,5 @@ def run_tuner():
                     'note_name': note_name(n0),
                     # 'offset': n - n0
                 }
-                played_data.append(note_info)
+                shared_variables.played_data.append(note_info)
                 # print(note_info)
