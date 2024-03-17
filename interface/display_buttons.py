@@ -77,9 +77,9 @@ def display_record_history(screen, font, selected_tab_id, dropdown_visible, widt
 
     # Dropdown list styling
     dropdown_list_rect = pygame.Rect(50, 80, 200, len(tab_ids) * 30)
-    dropdown_list_color = (50, 50, 50)
+    black = (43, 45, 48)
     if dropdown_visible:
-        pygame.draw.rect(screen, dropdown_list_color, dropdown_list_rect)
+        pygame.draw.rect(screen, black, dropdown_list_rect)
         for i, tab_id in enumerate(tab_ids):
             tab_id = tab_id[0]
             text_surface = font.render(get_tab_name_from_id(tab_id), True, white)
@@ -87,14 +87,14 @@ def display_record_history(screen, font, selected_tab_id, dropdown_visible, widt
             screen.blit(text_surface, text_rect)
 
     # Display selected tab
-    selected_tab_text = f"{tab_name}" if tab_name else ""
+    selected_tab_text = f"{tab_name}" if tab_name and not dropdown_visible else ""
     selected_tab_surface = personal_record_text_font.render(selected_tab_text, True, white)
     selected_tab_rect = selected_tab_surface.get_rect(centerx=width // 2, y=height/4)
     screen.blit(selected_tab_surface, selected_tab_rect)
 
     # Display precision record for the selected tab
     precision = get_precision_from_tab_id(selected_tab_id)
-    precision_text = f"Recorde Pessoal: {precision}%" if precision else ""
+    precision_text = f"Recorde Pessoal: {precision}%" if precision and not dropdown_visible else ""
     precision_surface = personal_record_text_font.render(precision_text, True, white)
     precision_rect = precision_surface.get_rect(centerx=width // 2, y=height/4 + 100)
     screen.blit(precision_surface, precision_rect)
