@@ -25,13 +25,13 @@ def update_database(tab_id, tab_name, precision):
         c.execute("UPDATE user_history SET precision=? WHERE id=?", (precision, tab_id))
     else:
         # Insert a new row with the tab_id and precision
-        c.execute("INSERT INTO user_history (id, name, precision) VALUES (?, ?)", (tab_id, tab_name, precision))
+        c.execute("INSERT INTO user_history (id, name, precision) VALUES (?, ?, ?)", (tab_id, tab_name, precision))
 
     conn.commit()
     conn.close()
 
 
-def query_database(tab_id):
+def get_precision_from_tab_id(tab_id):
     conn = sqlite3.connect('./database/database.db')
     c = conn.cursor()
 
@@ -41,6 +41,36 @@ def query_database(tab_id):
     conn.close()
 
     if record:
-        return record
+        return record[0]
     else:
-        return "0.00"
+        return ""
+
+
+def get_id_list():
+    conn = sqlite3.connect('./database/database.db')
+    c = conn.cursor()
+
+    c.execute("SELECT id FROM user_history")
+
+    id_list = c.fetchall()
+    conn.close()
+
+    if id_list:
+        return id_list
+    else:
+        return []
+
+
+def get_tab_name_from_id(tab_id):
+    conn = sqlite3.connect('./database/database.db')
+    c = conn.cursor()
+
+    c.execute("SELECT name FROM user_history WHERE id=?", (tab_id,))
+
+    tab_name = c.fetchone()
+    conn.close()
+
+    if tab_name:
+        return tab_name[0]
+    else:
+        return ""

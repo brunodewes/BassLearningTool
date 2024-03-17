@@ -3,6 +3,7 @@ import os
 import pygame
 
 import shared_variables
+from database.database_crud import get_precision_from_tab_id, get_id_list, get_tab_name_from_id
 
 
 def display_start_screen(screen, font, width, height):
@@ -39,6 +40,66 @@ def display_start_screen(screen, font, width, height):
     draw_button(screen, start_button_rect, button_color, start_button_text)
 
     return tab_button_rect, music_button_rect, start_button_rect
+
+
+def display_record_history_button(screen, font, width):
+    button_color = (95, 171, 100)
+    button_width = 250
+    button_height = 60
+    button_margin = 20
+
+    # Record history button
+    history_button_rect = pygame.Rect(width - button_width - button_margin, button_margin, button_width, button_height)
+    record_button_text = font.render("Recordes Pessoais", True, (255, 255, 255))
+    draw_button(screen, history_button_rect, button_color, record_button_text)
+
+    return history_button_rect
+
+
+def display_record_history(screen, font, selected_tab_id, dropdown_visible, width, height):
+    white = (230, 230, 230)
+
+    # Get a list of all tab IDs
+    tab_ids = get_id_list()
+
+    # Get name from tab_id
+    tab_name = get_tab_name_from_id(selected_tab_id)
+
+    personal_record_text_font = pygame.font.Font(None, 54)
+
+    # Dropdown button styling
+    dropdown_button_rect = pygame.Rect(50, 50, 200, 30)
+    dropdown_button_color = white
+    pygame.draw.rect(screen, dropdown_button_color, dropdown_button_rect, 2)
+    dropdown_button_text = font.render("Selecionar faixa", True, white)
+    dropdown_button_text_rect = dropdown_button_text.get_rect(center=dropdown_button_rect.center)
+    screen.blit(dropdown_button_text, dropdown_button_text_rect)
+
+    # Dropdown list styling
+    dropdown_list_rect = pygame.Rect(50, 80, 200, len(tab_ids) * 30)
+    dropdown_list_color = (50, 50, 50)
+    if dropdown_visible:
+        pygame.draw.rect(screen, dropdown_list_color, dropdown_list_rect)
+        for i, tab_id in enumerate(tab_ids):
+            tab_id = tab_id[0]
+            text_surface = font.render(get_tab_name_from_id(tab_id), True, white)
+            text_rect = text_surface.get_rect(x=dropdown_list_rect.x + 5, y=dropdown_list_rect.y + i * 30 + 5)
+            screen.blit(text_surface, text_rect)
+
+    # Display selected tab
+    selected_tab_text = f"{tab_name}" if tab_name else ""
+    selected_tab_surface = personal_record_text_font.render(selected_tab_text, True, white)
+    selected_tab_rect = selected_tab_surface.get_rect(centerx=width // 2, y=height/4)
+    screen.blit(selected_tab_surface, selected_tab_rect)
+
+    # Display precision record for the selected tab
+    precision = get_precision_from_tab_id(selected_tab_id)
+    precision_text = f"Recorde Pessoal: {precision}%" if precision else ""
+    precision_surface = personal_record_text_font.render(precision_text, True, white)
+    precision_rect = precision_surface.get_rect(centerx=width // 2, y=height/4 + 100)
+    screen.blit(precision_surface, precision_rect)
+
+    return dropdown_button_rect, dropdown_list_rect
 
 
 def display_end_screen_buttons(screen, font, width, height):

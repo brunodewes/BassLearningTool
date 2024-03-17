@@ -7,10 +7,11 @@ import math
 
 import shared_variables
 from collect_gp_file_data import collect_tab_data, collect_song_info
-from database.database_crud import query_database, update_database
+from database.database_crud import get_precision_from_tab_id, update_database, get_id_list
 from detect_leading_silence import trim
 from feedback import give_feedback
-from interface.display_buttons import display_start_screen, display_end_screen_buttons
+from interface.display_buttons import display_start_screen, display_end_screen_buttons, display_record_history_button, \
+    display_record_history
 from interface.prompt_file import prompt_file
 from interface.start_countdown import start_countdown
 from tuner import run_tuner
@@ -42,23 +43,25 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
     line_x = padding
     line_y_start = 0
     y_accumulator = 0
-    pixels_per_ms = 16 / time_resolution
+    pixels_per_ms = 1 / time_resolution
 
     waiting = False
     wait_start_time = None
     wait_duration = 1000
 
     tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
+    record_history_button_rect = display_record_history_button(screen, font, width)
 
     start_button_clicked = False
     running = False
     record_beaten = False
 
     running_start_screen = True
+    running_record_history_screen = False
     while running_start_screen:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running_start_screen = False
+                pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if tab_button_rect.collidepoint(mouse_pos):
@@ -67,15 +70,43 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                 elif music_button_rect.collidepoint(mouse_pos):
                     music_file = prompt_file(button_type='music')
                     shared_variables.music_file = music_file if music_file != "" else shared_variables.music_file
+                elif record_history_button_rect.collidepoint(mouse_pos):
+                    running_record_history_screen = True
+                    running_start_screen = False
                 elif start_button_rect.collidepoint(mouse_pos):
                     start_button_clicked = True
                     if shared_variables.tab_file.endswith((".gp3", ".gp4", ".gp5")) and shared_variables.music_file.endswith(("wav", "mp3")):
                         running_start_screen = False
 
         tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
+        record_history_button_rect = display_record_history_button(screen, font, width)
 
         pygame.display.flip()
-        clock.tick(60)
+
+    tab_ids = get_id_list()
+    selected_tab_id = None
+    dropdown_visible = False
+    while running_record_history_screen:
+        screen.fill(black)
+
+        back_to_start_button_rect = display_end_screen_buttons(screen, font, width, height)
+        dropdown_button_rect, dropdown_list_rect = display_record_history(screen, font, selected_tab_id, dropdown_visible, width, height)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if dropdown_button_rect.collidepoint(mouse_pos):
+                    dropdown_visible = not dropdown_visible
+                elif dropdown_visible and dropdown_list_rect.collidepoint(mouse_pos):
+                    selected_tab_id = tab_ids[(mouse_pos[1] - dropdown_list_rect.y) // 30][0]
+                    dropdown_visible = False
+                elif back_to_start_button_rect.collidepoint(mouse_pos):
+                    pygame.quit()
+                    run_interface()
+
+        pygame.display.flip()
 
     collect_tab_data(shared_variables.tab_file)
     tab_id = shared_variables.tab_data[-1]['time'] - shared_variables.tab_data[0]['time']
@@ -214,7 +245,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                         precision = f"{(hits / len(shared_variables.tab_data) * 100):.2f}"
 
                         # Update database if record beaten
-                        if precision > query_database(tab_id):
+                        if precision > get_precision_from_tab_id(tab_id):
                             update_database(tab_id, tab_name, precision)
                             record_beaten = True
 
@@ -238,7 +269,7 @@ def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, 
                                 f"Acertos: {hits}\n"
                                 f"Erros: {misses}\n"
                                 f"Precisão: {precision}%\n"
-                                f"Recorde Pessoal: {query_database(tab_id)}%"
+                                f"Recorde Pessoal: {get_precision_from_tab_id(tab_id)}%"
                             )
 
                         report_font = pygame.font.Font(None, 48)
