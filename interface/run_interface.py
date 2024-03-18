@@ -39,8 +39,8 @@ def run_interface(time_resolution=4, string_spacing=25, padding=30):
     light_blue = (135, 206, 235)
 
     width_limit = width - padding
-    row_height = string_spacing * 5  # Decreased y size
-    empty_row_height = string_spacing  # Height of the empty row
+    row_height = string_spacing * 5
+    empty_row_height = string_spacing
     total_row_height = row_height + empty_row_height
     scroll_y = 0
 
