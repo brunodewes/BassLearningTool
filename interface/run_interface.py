@@ -18,14 +18,20 @@ from tuner import run_tuner
 
 
 def run_interface(width=1800, height=900, time_resolution=4, string_spacing=25, padding=30):
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
     pygame.init()
     pygame.mixer.init()
 
     recording_thread = threading.Thread(target=run_tuner)
     feedback_thread = threading.Thread(target=give_feedback)
 
-    screen = pygame.display.set_mode((width, height))
+    info = pygame.display.Info()
+    screen_width, screen_height = info.current_w * 0.95, info.current_h * 0.8
+    window_width, window_height = screen_width, screen_height
+    width, height = window_width, window_height
+    screen = pygame.display.set_mode((window_width, window_height))
     pygame.display.set_caption("Bass Learning Tool")
+    pygame.display.update()
 
     clock = pygame.time.Clock()
 
