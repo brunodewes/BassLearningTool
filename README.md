@@ -32,5 +32,5 @@ Para executar a aplicação utilize ```python run.py```
 
 10) Na tela inicial do Bass Learning Tool, basta selecionar o arquivo de tablatura e o arquivo de áudio e clicar em iniciar.
 
-Obs: A captação do instrumento deve estar configurado como dispositivo de entrada padrão no sistema operacional para poder ser reconhecido pela aplicação.
+Obs: A captação do instrumento deve estar configurada como dispositivo de entrada padrão no sistema operacional para poder ser reconhecido pela aplicação.
 
