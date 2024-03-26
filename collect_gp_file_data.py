@@ -33,4 +33,3 @@ def collect_tab_data(tab_file):
                                         'note_name': note_name,
                                         'color': (43, 45, 48)
                                     })
-    # print(shared_variables.tab_data)

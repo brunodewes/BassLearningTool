@@ -8,7 +8,6 @@ import math
 import shared_variables
 from collect_gp_file_data import collect_tab_data, collect_song_info
 from database.database_crud import get_precision_from_tab_id, update_database, get_id_list
-from detect_leading_silence import trim
 from feedback import give_feedback
 from interface.display_buttons import display_start_screen, display_end_screen_buttons, display_record_history_button, \
     display_record_history
@@ -126,12 +125,7 @@ def run_interface(time_resolution=4, string_spacing=25, padding=30):
     for row in rows:
         row.fill(white)
 
-    # Trim the silence in the audio start and save it as a temporary WAV file
-    trimmed_sound = trim(shared_variables.music_file)
-    temp_wav_file = "../temp_audio.wav"
-    trimmed_sound.export(temp_wav_file, format='wav')
-
-    pygame.mixer.music.load(temp_wav_file)
+    pygame.mixer.music.load(shared_variables.music_file)
 
     if start_button_clicked:
         start_countdown(screen, duration=3000)
