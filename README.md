@@ -1,3 +1,5 @@
+Bass learning tool é uma A ferramenta de aprendizado de contrabaixo que combina a exibição de tablaturas na tela, reprodução de áudio computadorizado da música e captura do instrumento. Ela permite que os usuários pratiquem músicas específicas, seguindo a tablatura e recebendo feedback em tempo real para melhorar sua performance. A interface simplificada foca na leitura de tablaturas, proporcionando uma experiência imersiva e intuitiva. A aplicação não possui limitações quanto à lista de músicas disponíveis, permitindo que os usuários pratiquem qualquer tablatura desejada, desde que o arquivo esteja nas condições necessárias para funcionamento. Além disso, a aplicação oferece tutoriais para configurar níveis de dificuldade personalizáveis, facilitando o aprendizado para baixistas iniciantes.
+
 # Instalação
 
 Para instalar os pacotes necessários utilize ```pip install -r requirements.txt```
