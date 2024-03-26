@@ -1,6 +1,6 @@
 1) Faça o download e instalação do TuxGuitar: https://github.com/helge17/tuxguitar
 
-2) Faça o download do arquivo de tablatura que deseja praticar. A obtenção de arquivos de tablatura pode ser feita através de repositórios na internet gratuitamente, por exemplo https://guitarprotabs.org/ ou https://gtptabs.com/
+2) Faça o download do arquivo de tablatura que desejar praticar. A obtenção de arquivos de tablatura pode ser feita através de repositórios na internet gratuitamente, por exemplo https://guitarprotabs.org/ ou https://gtptabs.com/
 
 3) Com o TuxGuitar aberto, acesse ‘Arquivo’ – ‘Abrir’ e selecione a tablatura obtida.
 
