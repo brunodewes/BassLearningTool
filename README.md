@@ -8,7 +8,7 @@
 
 5) Dê dois cliques na faixa selecionada e, na janela de ‘Propriedades’ que aparecer, verifique a informação que aparece na aba ‘Tuning’. Caso esteja escrito “E A D G”, pode-se pular a próxima etapa e passar para o passo 7, se não, pressione o ícone de ferramenta ao lado direito da opção.
 
-6) Na aba de ‘Preset’, certifique-se de que a primeira opção esteja configurada em “Bass”, a segunda em “4-String” e a quarta em “E Tuning - E A D G”. Em seguida pressione ‘OK’.
+6) Na aba de ‘Preset’, certifique-se de que a primeira opção esteja configurada em “Bass”, a segunda em “4-String” e a terceira em “E Tuning - E A D G”. Em seguida pressione ‘OK’.
 
 7) Clique em  ‘Arquivo’ – ‘Salvar Como’ e, na janela de salvamento, clique em ‘Tipo’, selecione Guitar Pro 5 e salve no diretório que desejar (recomenda-se salvar na pasta ‘data’ dentro do diretório do Bass Learning Tool para maior conveniência). O arquivo estará preparado para ser usado na ferramenta de aprendizado.
 
