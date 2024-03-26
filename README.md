@@ -15,8 +15,11 @@
 8) Caso prefira praticar a música sem o som do contrabaixo de fundo, delete a faixa de contrabaixo antes de exportar o arquivo de áudio. Em seguida, clique em ‘Arquivo’ – ‘Exportar’ – ‘Exportar Audio File’ e na janela de ‘Options’ que aparecer clique em ‘OK’ e salve o arquivo de áudio no diretório que desejar (recomenda-se salvar na pasta ‘data’ dentro do diretório do Bass Learning Tool para maior conveniência). 
 
 9) (Opcional: Criar níveis de dificuldade)
+
 9.1) Para criar níveis de dificuldade, altera-se o tempo da música. Isso pode ser feito selecionando a aba ‘Composição’ – ‘Tempo’ no canto superior da tela. Recomenda-se que a dificuldade fácil contenha 50% do valor de tempo da música, a dificuldade média 75% e a dificuldade difícil mantenha o tempo da música. Basta multiplicar o tempo pela porcentagem desejada, alterar o campo e apertar em ‘OK’
+
 9.2) Na mesma aba de ‘Composição’, acesse ‘Propriedades’, ao final da lista. Adicione, ao fim do nome da música, o nível de dificuldade dela. (exemplo: “We Are The Champions” se torna “We Are The Champions - Fácil”).
+
 9.3) Repita os passos 7 e 8.
 
 10) Na tela inicial do Bass Learning Tool, basta selecionar o arquivo de tablatura e o arquivo de áudio e clicar em iniciar.
