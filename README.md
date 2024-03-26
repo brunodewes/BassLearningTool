@@ -1,6 +1,9 @@
-Para instalar os pacotes necessários, executar o comando ```pip install -r requirements.txt``` dentro do diretório principal. Executar a aplicação com ```python run.py```
+# Instalação
 
-Tutorial de uso
+Para instalar os pacotes necessários, utilize ```pip install -r requirements.txt``` dentro do diretório principal.
+Para executar a aplicação, utilize ```python run.py```
+
+# Tutorial de uso
 
 1) Faça o download e instalação do TuxGuitar: https://github.com/helge17/tuxguitar
 
