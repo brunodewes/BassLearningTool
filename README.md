@@ -1,6 +1,7 @@
 # Instalação
 
-Para instalar os pacotes necessários, utilize ```pip install -r requirements.txt``` dentro do diretório principal.
+Para instalar os pacotes necessários, utilize ```pip install -r requirements.txt```
+
 Para executar a aplicação, utilize ```python run.py```
 
 # Tutorial de uso
