@@ -1,3 +1,7 @@
+Para instalar os pacotes necessários, executar o comando ```pip install -r requirements.txt``` dentro do diretório principal. Executar a aplicação com ```python run.py```
+
+Tutorial de uso
+
 1) Faça o download e instalação do TuxGuitar: https://github.com/helge17/tuxguitar
 
 2) Faça o download do arquivo de tablatura que deseja praticar. A obtenção de arquivos de tablatura pode ser feita através de repositórios na internet gratuitamente, por exemplo https://guitarprotabs.org/ ou https://gtptabs.com/
@@ -23,3 +27,4 @@
 - Repita os passos 7 e 8.
 
 10) Na tela inicial do Bass Learning Tool, basta selecionar o arquivo de tablatura e o arquivo de áudio e clicar em iniciar.
+
