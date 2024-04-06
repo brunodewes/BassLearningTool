@@ -1,10 +1,13 @@
-# Instalação
+# Bass Learning Tool
+Bass learning tool é uma ferramenta de aprendizado de contrabaixo que combina a exibição de tablaturas na tela, reprodução de áudio computadorizado da música e captura do instrumento. Ela permite que os usuários pratiquem músicas seguindo a tablatura e recebendo feedback em tempo real para melhorar sua performance. A interface simplificada foca na leitura de tablaturas, proporcionando uma experiência imersiva e intuitiva. A aplicação não possui limitações quanto à lista de músicas disponíveis, permitindo que os usuários pratiquem qualquer tablatura desejada. Além disso, a aplicação oferece tutoriais para configurar níveis de dificuldade personalizáveis, facilitando o aprendizado para baixistas iniciantes.
+
+## Instalação
 
 Para instalar os pacotes necessários utilize ```pip install -r requirements.txt```
 
 Para executar a aplicação utilize ```python run.py```
 
-# Tutorial de uso
+## Tutorial de uso
 
 1) Faça o download e instalação do TuxGuitar: https://github.com/helge17/tuxguitar
 
@@ -31,4 +34,6 @@ Para executar a aplicação utilize ```python run.py```
 - Repita os passos 7 e 8.
 
 10) Na tela inicial do Bass Learning Tool, basta selecionar o arquivo de tablatura e o arquivo de áudio e clicar em iniciar.
+
+Obs: A captação do instrumento deve estar configurada como dispositivo de entrada padrão no sistema operacional para poder ser reconhecida pela aplicação e assim gerar o feedback.
 
