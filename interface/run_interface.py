@@ -52,7 +52,7 @@ def run_interface(time_resolution=4, string_spacing=25, padding=30):
     wait_start_time = None
     wait_duration = 1000
 
-    tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
+    tab_button_rect, music_button_rect, start_button_rect, beep_button_rect = display_start_screen(screen, font, width, height)
     record_history_button_rect = display_record_history_button(screen, font, width)
 
     start_button_clicked = False
@@ -76,12 +76,14 @@ def run_interface(time_resolution=4, string_spacing=25, padding=30):
                 elif record_history_button_rect.collidepoint(mouse_pos):
                     running_record_history_screen = True
                     running_start_screen = False
+                elif beep_button_rect.collidepoint(mouse_pos):
+                    shared_variables.beep_enabled = not shared_variables.beep_enabled
                 elif start_button_rect.collidepoint(mouse_pos):
                     start_button_clicked = True
                     if shared_variables.tab_file.endswith((".gp3", ".gp4", ".gp5")) and shared_variables.music_file.endswith(("wav", "mp3")):
                         running_start_screen = False
 
-        tab_button_rect, music_button_rect, start_button_rect = display_start_screen(screen, font, width, height)
+        tab_button_rect, music_button_rect, start_button_rect, beep_button_rect = display_start_screen(screen, font, width, height)
         record_history_button_rect = display_record_history_button(screen, font, width)
 
         pygame.display.flip()

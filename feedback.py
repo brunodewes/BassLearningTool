@@ -1,3 +1,5 @@
+import winsound
+
 import pygame
 
 from compare_arrays import compare_data
@@ -25,6 +27,8 @@ def give_feedback():
             else:
                 shared_variables.misses += 1
                 shared_variables.tab_data[note_index]['color'] = (255, 0, 0)
+                if shared_variables.beep_enabled:
+                    winsound.Beep(150, 300)
 
             is_check_time = False
             note_index += 1

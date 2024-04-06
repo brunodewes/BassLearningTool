@@ -39,7 +39,12 @@ def display_start_screen(screen, font, width, height):
     start_button_text = font.render("Iniciar", True, (255, 255, 255))
     draw_button(screen, start_button_rect, button_color, start_button_text)
 
-    return tab_button_rect, music_button_rect, start_button_rect
+    # Beep toggle button
+    beep_button_rect = pygame.Rect((width - 250 - button_margin), height * 0.9,
+                                   20, 20)
+    draw_check_button(screen, beep_button_rect, shared_variables.beep_enabled, font.render("Feedback Auditivo", True, (230, 230, 230)))
+
+    return tab_button_rect, music_button_rect, start_button_rect, beep_button_rect
 
 
 def display_record_history_button(screen, font, width):
@@ -89,14 +94,14 @@ def display_record_history(screen, font, selected_tab_id, dropdown_visible, widt
     # Display selected tab
     selected_tab_text = f"{tab_name}" if tab_name and not dropdown_visible else ""
     selected_tab_surface = personal_record_text_font.render(selected_tab_text, True, white)
-    selected_tab_rect = selected_tab_surface.get_rect(centerx=width // 2, y=height/4)
+    selected_tab_rect = selected_tab_surface.get_rect(centerx=width // 2, y=height / 4)
     screen.blit(selected_tab_surface, selected_tab_rect)
 
     # Display precision record for the selected tab
     precision = get_precision_from_tab_id(selected_tab_id)
     precision_text = f"Recorde Pessoal: {precision}%" if precision and not dropdown_visible else ""
     precision_surface = personal_record_text_font.render(precision_text, True, white)
-    precision_rect = precision_surface.get_rect(centerx=width // 2, y=height/4 + 100)
+    precision_rect = precision_surface.get_rect(centerx=width // 2, y=height / 4 + 100)
     screen.blit(precision_surface, precision_rect)
 
     return dropdown_button_rect, dropdown_list_rect
@@ -129,3 +134,16 @@ def draw_button(screen, rect, color, text, right_text=None):
         right_text_surf = selected_file_font.render(file_name, True, (230, 230, 230))
         right_text_rect = right_text_surf.get_rect(midleft=(rect.right + 10, rect.centery))
         screen.blit(right_text_surf, right_text_rect)
+
+
+def draw_check_button(screen, rect, checked, text):
+    check_color = (255, 255, 255) if not checked else (95, 171, 100)
+    pygame.draw.rect(screen, (255, 255, 255), rect)
+    if checked:
+        pygame.draw.line(screen, check_color, (rect.left + 3, rect.centery), (rect.centerx - 2, rect.bottom - 3), 4)
+        pygame.draw.line(screen, check_color, (rect.centerx - 2, rect.bottom - 3), (rect.right - 3, rect.top + 3), 4)
+    pygame.draw.rect(screen, (0, 0, 0), rect, 1)
+
+    # Position the text next to the check button
+    text_rect = text.get_rect(midleft=(rect.right + 10, rect.centery))
+    screen.blit(text, text_rect)
