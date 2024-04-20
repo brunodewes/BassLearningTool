@@ -9,7 +9,7 @@ import shared_variables
 def give_feedback():
     note_index = 0
     is_check_time = False
-    tolerance_ms = 200
+    tolerance_ms = 250
 
     while pygame.mixer.music.get_busy():
         for event in pygame.event.get():
@@ -28,7 +28,7 @@ def give_feedback():
                 shared_variables.misses += 1
                 shared_variables.tab_data[note_index]['color'] = (255, 0, 0)
                 if shared_variables.beep_enabled:
-                    winsound.Beep(150, 300)
+                    winsound.Beep(200, 250)
 
             is_check_time = False
             note_index += 1

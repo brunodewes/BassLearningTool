@@ -10,6 +10,7 @@ def start_countdown(screen, duration):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 countdown_running = False
+                pygame.quit()
 
         screen.fill((43, 45, 48))
 
