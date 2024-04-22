@@ -21,7 +21,7 @@ import shared_variables
 
 NOTE_MIN = 28       # E1
 NOTE_MAX = 67       # G4
-FSAMP = 44100       # Sampling frequency in Hz
+FSAMP = 48000       # Sampling frequency in Hz
 FRAME_SIZE = 2048   # How many samples per frame?
 FRAMES_PER_FFT = 16 # FFT takes average across how many frames?
 
