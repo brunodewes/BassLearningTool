@@ -27,7 +27,7 @@ Para executar a aplicação utilize ```python run.py```
 
 9) (Opcional: Criar níveis de dificuldade)
 
-- Para criar níveis de dificuldade, altera-se o tempo da música. Isso pode ser feito selecionando a aba ‘Composição’ – ‘Tempo’ no canto superior da tela. Recomenda-se que a dificuldade fácil contenha 50% do valor de tempo da música, a dificuldade média 75% e a dificuldade difícil mantenha o tempo da música. Basta multiplicar o tempo pela porcentagem desejada, alterar o campo e apertar em ‘OK’
+- Para criar níveis de dificuldade, altera-se o tempo da música. Isso pode ser feito selecionando a aba ‘Composição’ – ‘Tempo’ no canto superior da tela. Recomenda-se que a dificuldade fácil contenha 75% do valor de tempo da música, a dificuldade média 85% e a dificuldade difícil mantenha o tempo da música. Basta multiplicar o tempo pela porcentagem desejada, alterar o campo e apertar em ‘OK’
 
 - Na mesma aba de ‘Composição’, acesse ‘Propriedades’, ao final da lista. Adicione, ao fim do nome da música, o nível de dificuldade dela. (exemplo: “We Are The Champions” se torna “We Are The Champions - Fácil”).
 
